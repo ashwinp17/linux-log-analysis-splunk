@@ -34,7 +34,18 @@ Jun 14 15:16:01 combo sshd(pam_unix)[19939]: authentication failure; logname= ui
 
 **Classification:** Suspicious
 
-**Reasoning:** This entry shows an SSH authentication failure from `218.188.2.4`. Repeated failed authentication attempts from the same source IP can indicate automated credential guessing or brute-force activity.
+**Reasoning:** This entry is an SSH authentication failure from `218.188.2.4`. The `uid=0` and `euid=0` fields reflect the privilege level of the sshd/PAM process performing the authentication check, not the username being attempted. Because `logname=` is blank, this individual line does not identify the targeted account. I classified it as suspicious because the same source IP appears repeatedly in the surrounding logs, which is consistent with automated credential guessing or brute-force activity.
+
+**Benign comparison log entries:**
+
+```text
+Jun 28 04:03:15 combo su(pam_unix)[10735]: session opened for user cyrus by (uid=0)
+Jun 28 04:03:16 combo su(pam_unix)[10735]: session closed for user cyrus
+```
+
+**Classification:** Benign / expected activity
+
+**Reasoning:** These entries show a local user session opening and closing normally one second later. There are no failed passwords, unknown users, or repeated login attempts from an external source. I would treat this as expected activity unless additional surrounding events or account context indicated otherwise.
 
 ## Python Automation
 
@@ -55,7 +66,7 @@ I uploaded the Linux log dataset into Splunk Enterprise and used SPL searches to
 ### Key Findings
 
 - **Total Linux events:** 1,294
-- **Suspicious authentication events:** The 512 suspicious authentication events represent approximately 40% of the 1,294 total Linux events, showing that suspicious activity made up a significant portion of the dataset rather than being a small isolated event.
+- **Suspicious authentication events:** 512 Suspicious authentication events accounted for 512 of 1,294 total events (~40%) — a significant share, not an isolated anomaly.
 - **Source hosts identified:** 39
 - **Most active source:** 150.183.249.110
 - **Attempts from the most active source:** 80
