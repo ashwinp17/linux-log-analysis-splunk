@@ -26,6 +26,16 @@ I manually reviewed Linux authentication logs and documented suspicious events, 
 - Attempts targeting the root account
 - Abnormal process activity
 
+**Example log entry:**
+
+```text
+Jun 14 15:16:01 combo sshd(pam_unix)[19939]: authentication failure; logname= uid=0 euid=0 tty=NODEVssh ruser= rhost=218.188.2.4
+```
+
+**Classification:** Suspicious
+
+**Reasoning:** This entry shows an SSH authentication failure from `218.188.2.4`. Repeated failed authentication attempts from the same source IP can indicate automated credential guessing or brute-force activity.
+
 ## Python Automation
 
 I created `log_analysis.py` to:
@@ -45,7 +55,7 @@ I uploaded the Linux log dataset into Splunk Enterprise and used SPL searches to
 ### Key Findings
 
 - **Total Linux events:** 1,294
-- **Suspicious authentication events:** 512
+- **Suspicious authentication events:** The 512 suspicious authentication events represent approximately 40% of the 1,294 total Linux events, showing that suspicious activity made up a significant portion of the dataset rather than being a small isolated event.
 - **Source hosts identified:** 39
 - **Most active source:** 150.183.249.110
 - **Attempts from the most active source:** 80
