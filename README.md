@@ -66,7 +66,7 @@ I uploaded the Linux log dataset into Splunk Enterprise and used SPL searches to
 ### Key Findings
 
 - **Total Linux events:** 1,294
-- **Suspicious authentication events:** 512 Suspicious authentication events accounted for 512 of 1,294 total events (~40%) — a significant share, not an isolated anomaly.
+- **Suspicious authentication events:** 512 (~40% of 1,294 total events) — a significant share, not an isolated anomaly.
 - **Source hosts identified:** 39
 - **Most active source:** 150.183.249.110
 - **Attempts from the most active source:** 80
